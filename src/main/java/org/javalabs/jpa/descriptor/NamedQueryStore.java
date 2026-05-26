@@ -26,4 +26,9 @@ public interface NamedQueryStore {
      * @return QueryAttribute
      */
     QueryAttribute get(String name);
+    
+    /**
+     * Clear this query store.
+     */
+    void clear();
 }

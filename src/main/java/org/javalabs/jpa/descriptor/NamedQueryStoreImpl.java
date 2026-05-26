@@ -36,5 +36,9 @@ public class NamedQueryStoreImpl implements NamedQueryStore {
     public QueryAttribute get(String name) {
         return queryMap.get(name);
     }
-    
+
+    @Override
+    public void clear() {
+        queryMap.clear();
+    }
 }

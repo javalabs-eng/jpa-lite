@@ -16,6 +16,7 @@ import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Properties;
+import org.javalabs.jpa.descriptor.NamedQueryStoreImpl;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -191,13 +192,20 @@ public class LitePersistenceProvider implements PersistenceProvider {
     @Override
     public boolean generateSchema(PersistenceConfiguration pc) {
         PersistenceHandler handler = PersistenceHandler.get();
-        for (Class clazz : pc.managedClasses()) {
-            handler.createDescriptor(clazz);
-        }
-        LtSchemaInitializer initializer = new LtSchemaInitializer();
-        initializer.generateDDL(pc);
         
-        return Boolean.TRUE;
+        try {
+            for (Class clazz : pc.managedClasses()) {
+                handler.createDescriptor(clazz);
+            }
+            LtSchemaInitializer initializer = new LtSchemaInitializer();
+            initializer.generateDDL(pc);
+
+            return Boolean.TRUE;
+        }
+        finally {
+            NamedQueryStoreImpl.getStore().clear();
+            handler.clear(pc.managedClasses());
+        }
     }
 
     @Override

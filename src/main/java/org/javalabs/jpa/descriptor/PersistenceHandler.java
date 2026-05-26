@@ -220,4 +220,21 @@ public class PersistenceHandler {
     public List<Class<?>> entities() {
         return new ArrayList<>(entityMapping.keySet());
     }
+    
+    /**
+     * Clear the entity mapping for the given entities.
+     * @param entities
+     */
+    public void clear(List<Class<?>> entities) {
+        for (Class<?> entity : entities) {
+            entityMapping.remove(entity);
+        }
+    }
+    
+    /**
+     * Clear the entity mapping.
+     */
+    public void clear() {
+        entityMapping.clear();
+    }
 }
