@@ -36,6 +36,12 @@ import java.util.Map;
 public interface SQLDialect {
     
     /**
+     * Return the dependency for the respective sql client in GAV {group:artifact:version} format.
+     * @return String 
+     */
+    String dependency();
+    
+    /**
      * Form and return the jdbc database url.
      * 
      * @param host      Remote database host name

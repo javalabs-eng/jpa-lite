@@ -78,7 +78,7 @@ public class LtSchemaInitializer {
             SQLDialect sqlDialect = ObjectCreationUtil.create(dialect.dialectClass());
 
             if ("drop-and-create".equals(mode) || "drop".equals(mode)) {
-                generateDropScript(sqlDialect, file);
+                generateDropScript(sqlDialect, file, classes);
             }
 
             if ("create".equals(mode) || "drop-and-create".equals(mode)) {
@@ -255,7 +255,7 @@ public class LtSchemaInitializer {
      * @param filename
      * @throws IOException 
      */
-    private void generateDropScript(SQLDialect sqlDialect, String filename) throws IOException {
+    private void generateDropScript(SQLDialect sqlDialect, String filename, List<Class<?>> classes) throws IOException {
         StringBuilder buff = new StringBuilder(4096);
         
         String dropFile = "";
@@ -276,7 +276,7 @@ public class LtSchemaInitializer {
         buff.append("\n").append(sqlDialect.run_command(file.getAbsolutePath()));
         buff.append("\n\n");
         
-        for (Class<?> entity : PersistenceHandler.get().entities()) {
+        for (Class<?> entity : classes) {
             ClassDescriptor desc = PersistenceHandler.get().getDescriptor(entity);
             if (desc == null) {
                 throw new IllegalArgumentException("Object " + entity.getName() + " is not a registered jpa entity");

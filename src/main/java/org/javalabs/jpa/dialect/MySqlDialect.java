@@ -42,6 +42,11 @@ public class MySqlDialect extends AbstractDBDialect {
     }
 
     @Override
+    public String dependency() {
+        return "com.mysql:mysql-connector-j:9.7.0";
+    }
+
+    @Override
     public String data_type(Class<?> javatype) {
         String dbDataType = DATATYPE_MAPPING.get(javatype);
         if (dbDataType == null) {

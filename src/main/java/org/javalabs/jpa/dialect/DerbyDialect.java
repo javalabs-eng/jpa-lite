@@ -44,6 +44,11 @@ public class DerbyDialect extends AbstractDBDialect {
     }
 
     @Override
+    public String dependency() {
+        return "org.apache.derby:derbyclient:10.17.1.0";
+    }
+
+    @Override
     public String data_type(Class<?> javatype) {
         String dbDataType = DATATYPE_MAPPING.get(javatype);
         if (dbDataType == null) {

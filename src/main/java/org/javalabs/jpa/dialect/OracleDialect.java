@@ -43,6 +43,11 @@ public class OracleDialect extends AbstractDBDialect {
     }
 
     @Override
+    public String dependency() {
+        return "com.oracle.database.jdbc:ojdbc11:23.26.2.0.0";
+    }
+
+    @Override
     public String data_type(Class<?> javatype) {
         String dbDataType = DATATYPE_MAPPING.get(javatype);
         if (dbDataType == null) {

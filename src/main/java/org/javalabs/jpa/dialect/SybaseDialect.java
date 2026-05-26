@@ -42,6 +42,11 @@ public class SybaseDialect extends AbstractDBDialect {
     }
 
     @Override
+    public String dependency() {
+        return "jdbc.sybase:jconn4:16.0";
+    }
+
+    @Override
     public String data_type(Class<?> javatype) {
         String dbDataType = DATATYPE_MAPPING.get(javatype);
         if (dbDataType == null) {

@@ -54,6 +54,11 @@ public class PostgresDialect extends AbstractDBDialect {
     }
 
     @Override
+    public String dependency() {
+        return "org.postgresql:postgresql:42.7.11";
+    }
+
+    @Override
     public String data_type(Class<?> javatype) {
         String dbDataType = DATATYPE_MAPPING.get(javatype);
         if (dbDataType == null) {
