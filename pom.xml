@@ -7,13 +7,16 @@
 
     <name>jpa-lite</name>
     <description>Light weight java persistence api</description>
+    
+    <!-- Declaring the license(s) used for distributing OTL components -->
+    <licenses>
+        <license>
+          <name>The Apache License, Version 2.0</name>
+          <url>http://www.apache.org/licenses/LICENSE-2.0.txt</url>
+        </license>
+    </licenses>
 
     <dependencies>
-        <!--dependency>
-            <groupId>javax.persistence</groupId>
-            <artifactId>javax.persistence-api</artifactId>
-            <version>2.2</version>
-        </dependency-->
         <dependency>
             <groupId>jakarta.persistence</groupId>
             <artifactId>jakarta.persistence-api</artifactId>

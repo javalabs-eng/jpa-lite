@@ -1,6 +1,6 @@
 #!/bin/sh
 
-# Example: sh model-gen -j $HOME/temp/folks-app -k io.opns.app -d postgres -h localhost -p 5432 -n ecmdb -s public -u test -w p\@\$\$word -x fks_
+# Example: sh model-gen -j $HOME/temp/folks-app -k io.opns.app -d postgres -h localhost -p 5432 -n testdb -s public -u test -w p\@\$\$word -x fks_
 
 export BASE_DIR=$HOME/Projects/jpa-lite
 
@@ -21,5 +21,4 @@ export CLASSPATH=$CLASSPATH:$HOME/.m2/repository/org/javalabs/decl/decl-util/2.0
 export DEBUG_OPT="-Xdebug -Xnoagent -Xrunjdwp:transport=dt_socket,server=y,suspend=n,address=9792"
 export JAVA_OPTS="-Dorg.slf4j.simpleLogger.defaultLogLevel=TRACE"
 
-#java -classpath $CLASSPATH org.javalabs.jpa.entity.EntityGenerator "$@"
-java -Dpause $DEBUG_OPT $JAVA_OPTS -classpath $CLASSPATH org.javalabs.jpa.entity.EntityGenerator "$@"
+java $DEBUG_OPT $JAVA_OPTS -classpath $CLASSPATH org.javalabs.jpa.entity.EntityGenerator "$@"
