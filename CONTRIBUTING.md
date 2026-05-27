@@ -53,7 +53,7 @@ Key capabilities:
    ```
 3. **Add the upstream remote**:
    ```bash
-   git remote add upstream https://github.com/sudiptasish/jpa-lite.git
+   git remote add upstream https://github.com/javalabs-eng/jpa-lite.git
    ```
 
 ---
@@ -91,7 +91,7 @@ To run tests only:
 
 ### Reporting Bugs
 
-If you find a bug, please [open an issue](https://github.com/sudiptasish/jpa-lite/issues) and include:
+If you find a bug, please [open an issue](https://github.com/javalabs-eng/jpa-lite/issues) and include:
 
 - A clear, descriptive title.
 - Steps to reproduce the problem.
@@ -101,7 +101,7 @@ If you find a bug, please [open an issue](https://github.com/sudiptasish/jpa-lit
 
 ### Suggesting Enhancements
 
-We welcome ideas for new features or improvements. Please [open an issue](https://github.com/sudiptasish/jpa-lite/issues) with:
+We welcome ideas for new features or improvements. Please [open an issue](https://github.com/javalabs-eng/jpa-lite/issues) with:
 
 - A clear description of the enhancement.
 - The motivation and use case behind the request.
