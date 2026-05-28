@@ -3,10 +3,11 @@
     <modelVersion>4.0.0</modelVersion>
     <groupId>org.javalabs.jpa</groupId>
     <artifactId>jpa-lite</artifactId>
-    <version>1.0.1</version>
+    <version>1.0.3</version>
 
     <name>jpa-lite</name>
     <description>Light weight java persistence api</description>
+    <url>https://github.com/javalabs-eng/jpa-lite</url>
     
     <!-- Declaring the license(s) used for distributing OTL components -->
     <licenses>
