@@ -4,13 +4,13 @@
 
 Unlike traditional JPA implementations, JPA-LiTE avoids the excessive creation of short-lived objects that leads to heap fragmentation and frequent garbage collection pauses. This makes it suitable for enterprise batch ingestion pipelines and any latency-sensitive Java application. It is framework-agnostic and works with Jakarta EE, Spring Boot, Vert.x, and plain Java SE.
 
-**Latest stable version:** `1.0.1`. `Jdk 21` and `jakarta.persistence-api:4.0.0-M1` compliant 
+**Latest stable version:** `1.0.4`. `Jdk 21` and `jakarta.persistence-api:4.0.0-M1` compliant 
 
 ```xml
 <dependency>
     <groupId>org.javalabs.jpa</groupId>
     <artifactId>jpa-lite</artifactId>
-    <version>1.0.1</version>
+    <version>1.0.4</version>
 </dependency>
 ```
 
@@ -65,7 +65,7 @@ Modify your pom file to have the below dependency:
 <dependency>
     <groupId>org.javalabs</groupId>
     <artifactId>jpa-lite</artifactId>
-    <version>1.0.1</version>
+    <version>1.0.4</version>
 </dependency>
 ```
 
@@ -1038,7 +1038,7 @@ You can generate the table scripts, constraint index definition by following the
 <dependency>
     <groupId>org.javalabs</groupId>
     <artifactId>jpa-lite</artifactId>
-    <version>1.0.1</version>
+    <version>1.0.4</version>
 </dependency>
 ```
 This in turn will download the jpa-spec `jakarta.persistence-api` library

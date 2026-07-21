@@ -3,7 +3,7 @@
     <modelVersion>4.0.0</modelVersion>
     <groupId>org.javalabs.jpa</groupId>
     <artifactId>jpa-lite</artifactId>
-    <version>1.0.3</version>
+    <version>1.0.4</version>
 
     <name>jpa-lite</name>
     <description>Light weight java persistence api</description>
@@ -187,6 +187,8 @@
                     <autoPublish>true</autoPublish>
                 </configuration>
             </plugin>
+            
+            <!-- mvn javadoc:javadoc -->
             <!-- plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-javadoc-plugin</artifactId>
