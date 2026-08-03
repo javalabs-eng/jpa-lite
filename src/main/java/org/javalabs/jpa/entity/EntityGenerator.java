@@ -5,6 +5,7 @@ import jakarta.xml.bind.JAXBException;
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
+import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.nio.file.StandardOpenOption;
 import java.util.Arrays;
@@ -224,10 +225,23 @@ public class EntityGenerator {
                 System.out.println("*** " + me.getKey() + ".java" + " ***");
                 System.out.println(me.getValue());
             }
+            Path filePath = Paths.get(project, "src/main/java/" + pkgName.replace('.', File.separatorChar) + File.separator + me.getKey() + ".java");
+            Path parent = filePath.getParent();
+
+            if (parent != null) {
+                Files.createDirectories(parent);
+            }
+            // This will:
+            // 
+            // Create the file if it doesn't exist.
+            // Overwrite its contents if it does.
+            
             Files.write(
-                    Paths.get(project, "src/main/java/" + pkgName.replace('.', File.separatorChar) + File.separator + me.getKey() + ".java")
+                    filePath
                     , me.getValue().getBytes()
-                    , StandardOpenOption.CREATE_NEW);
+                    , StandardOpenOption.CREATE
+                    , StandardOpenOption.TRUNCATE_EXISTING
+                    , StandardOpenOption.WRITE);
         }
     }
     

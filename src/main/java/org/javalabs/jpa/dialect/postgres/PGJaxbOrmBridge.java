@@ -92,7 +92,9 @@ public class PGJaxbOrmBridge {
                 ColumnMetadata colMD = colMapping.get(pkMD.getColumnName());
                 GeneratedValueType genVal = null;
                 
-                if (colMD != null && colMD.getColumnDefault() != null && colMD.getColumnDefault().startsWith("nextval(")) {
+                if (colMD != null
+                        && ("YES".equalsIgnoreCase(colMD.getIsIdentity())
+                        || (colMD.getColumnDefault() != null && colMD.getColumnDefault().startsWith("nextval(")))) {
                     // Auto generated column.
                     genVal = new GeneratedValueType();
                     genVal.setStrategy("IDENTITY");

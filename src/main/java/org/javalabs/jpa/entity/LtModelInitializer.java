@@ -20,10 +20,10 @@ public class LtModelInitializer {
         try {
             Class<?> clazz = Class.forName("org.javalabs.decl.gen.JaxbJpaConverterBridge");
             Constructor cons = clazz.getDeclaredConstructor(new Class[] {});
-            Object obj = cons.newInstance((Object) new String[] {});
+            Object obj = cons.newInstance(new Object[] {});
             
             Method method = clazz.getDeclaredMethod("toRawClass", new Class[] {String.class});
-            return (Map<String, String>)method.invoke(obj, (Object) new String[] {ormXml});
+            return (Map<String, String>)method.invoke(obj, new String[] {ormXml});
             
         }
         catch (ClassNotFoundException | NoSuchMethodException | InstantiationException
