@@ -79,31 +79,68 @@ public class CreateScriptListener implements PostConstructListener {
         try {
             ByteArrayOutputStream bOut = new ByteArrayOutputStream();
             String tableScript = props.getProperty("javax.persistence.schema-generation.scripts.create-target");
-            in = getClass().getClassLoader().getResourceAsStream(tableScript);
             
-            if (in != null) {
-                int i = 0;
-                byte[] b = new byte[1024];
-                while ((i = in.read(b)) != -1) {
-                    bOut.write(b, 0, i);
-                }
-                bOut.write("\n".getBytes());
-                
-                bOut.close();
-                in.close();
-                
-                em = emf.createEntityManager();
+            if (tableScript != null && tableScript.trim().length() > 1) {
+                in = getClass().getClassLoader().getResourceAsStream(tableScript.trim());
 
-                em.getTransaction().begin();
-                int count = em.createNativeQuery(bOut.toString()).executeUpdate();
-                em.getTransaction().commit();
+                if (in != null) {
+                    int i = 0;
+                    byte[] b = new byte[1024];
+                    while ((i = in.read(b)) != -1) {
+                        bOut.write(b, 0, i);
+                    }
+                    bOut.write("\n".getBytes());
 
-                if (LOGGER.isInfoEnabled()) {
-                    LOGGER.debug("Created database table. Update count: {}", count);
+                    bOut.close();
+                    in.close();
+
+                    em = emf.createEntityManager();
+
+                    em.getTransaction().begin();
+                    int count = em.createNativeQuery(bOut.toString()).executeUpdate();
+                    em.getTransaction().commit();
+
+                    if (LOGGER.isInfoEnabled()) {
+                        LOGGER.debug("Created database table. Update count: {}", count);
+                    }
+                    bOut.flush();
+                    bOut.reset();
+
+                    // Now run the reference data.
+                    String refScript = props.getProperty("javax.persistence.sql-load-script-source");
+                    if (refScript != null && refScript.trim().length() > 1) {
+                        InputStream refIn = getClass().getClassLoader().getResourceAsStream(refScript.trim());
+
+                        if (refIn != null) {
+                            i = 0;
+                            b = new byte[1024];
+
+                            while ((i = refIn.read(b)) != -1) {
+                                bOut.write(b, 0, i);
+                            }
+                            bOut.write("\n".getBytes());
+
+                            bOut.close();
+                            refIn.close();
+
+                            em.getTransaction().begin();
+                            count = em.createNativeQuery(bOut.toString()).executeUpdate();
+                            em.getTransaction().commit();
+
+                            if (LOGGER.isInfoEnabled()) {
+                                LOGGER.debug("Inserted reference data. Update count: {}", count);
+                            }
+                            bOut.flush();
+                            bOut.reset();
+                        }
+                        else {
+                            LOGGER.warn("Reference data script {} is not found in the classpath", refScript);
+                        }
+                    }
                 }
-            }
-            else {
-                LOGGER.warn("Table script {} is not found in the persistence.xml");
+                else {
+                    LOGGER.warn("Table script {} is not found in the classpath", tableScript);
+                }
             }
         }
         catch (IOException | RuntimeException e) {

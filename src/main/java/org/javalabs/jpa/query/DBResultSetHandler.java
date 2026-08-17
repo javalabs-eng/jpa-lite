@@ -77,6 +77,12 @@ public class DBResultSetHandler extends ResultSetHandler {
                             break;
 
                     case Types.NUMERIC:
+                            Double val4 = resultSet.getDouble(i + 1);
+                            if (!resultSet.wasNull()) {
+                                row[i] = val4;
+                            }
+                            break;
+                            
                     case Types.INTEGER:
                             Integer val1 = resultSet.getInt(i + 1);
                             if (!resultSet.wasNull()) {
