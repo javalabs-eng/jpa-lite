@@ -7,6 +7,9 @@
         <transaction-type>TEST_LOCAL</transaction-type>
         
         <class>org.javalabs.jpa.model.Employee</class>
+        <class>org.javalabs.jpa.model.FksUser</class>
+        <class>org.javalabs.jpa.model.FksProfessional</class>
+        <class>org.javalabs.jpa.model.FksProfessionalService</class>
         
         <shared-cache-mode>NONE</shared-cache-mode>
         <properties>

@@ -1,0 +1,235 @@
+/*
+ * Copyright 2026 schan280.
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *      http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+package org.javalabs.jpa.model;
+
+import jakarta.persistence.CheckConstraint;
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import jakarta.persistence.IdClass;
+import jakarta.persistence.NamedNativeQueries;
+import jakarta.persistence.NamedNativeQuery;
+import jakarta.persistence.Table;
+import java.io.Serializable;
+import java.sql.Timestamp;
+import java.util.Objects;
+
+/**
+ *
+ * @author schan280
+ */
+@Entity
+@Table(name = "fks_users")
+@IdClass(FksUser.FksUserPK.class)
+@NamedNativeQueries({
+    @NamedNativeQuery(name = "User.selectAll", query = "SELECT * FROM fks_users"),
+    @NamedNativeQuery(name = "User.selectByExtId", query = "SELECT * FROM fks_users WHERE external_id = ?"),
+    @NamedNativeQuery(name = "User.selectByRole", query = "SELECT * FROM fks_users WHERE role = ?")
+})
+public class FksUser implements Serializable, Cloneable {
+
+    public static enum Role {
+        CUSTOMER,
+        PROFESSIONAL,
+        ADMIN;
+    };
+
+    public static enum Status {
+        ACTIVE,
+        INACTIVE,
+        BLOCKED;
+    };
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "user_id", nullable = false, updatable = false, precision = 32)
+    private Integer userId;
+
+    @Column(name = "external_id", nullable = false, updatable = false, length = 36)
+    private String externalId;
+
+    @Column(name = "full_name", nullable = false, updatable = true, length = 96)
+    private String fullName;
+
+    @Column(name = "email", nullable = false, updatable = true, length = 128)
+    private String email;
+
+    @Column(name = "phone1", nullable = false, updatable = true, length = 20)
+    private String phone1;
+
+    @Column(name = "phone2", nullable = true, updatable = true, length = 20)
+    private String phone2;
+
+    @Column(name = "password_hash", nullable = true, updatable = false, length = 1000000000)
+    private String passwordHash;
+
+    @Column(name = "role", nullable = false, updatable = false, check = @CheckConstraint(constraint = "role IN ('CUSTOMER', 'PROFESSIONAL', 'ADMIN')"))
+    @Enumerated(EnumType.STRING)
+    private Role role;
+
+    @Column(name = "status", nullable = false, updatable = true, check = @CheckConstraint(constraint = "status IN ('ACTIVE', 'INACTIVE', 'BLOCKED')"))
+    @Enumerated(EnumType.STRING)
+    private Status status;
+
+    @Column(name = "created_at", nullable = false, updatable = false)
+    private Timestamp createdAt;
+
+    @Column(name = "updated_at", nullable = true, updatable = true)
+    private Timestamp updatedAt;
+
+    public FksUser() {}
+
+    public void setUserId(Integer userId) {
+        this.userId = userId;
+    }
+
+    public Integer getUserId() {
+        return this.userId;
+    }
+
+    public void setExternalId(String externalId) {
+        this.externalId = externalId;
+    }
+
+    public String getExternalId() {
+        return this.externalId;
+    }
+
+    public void setFullName(String fullName) {
+        this.fullName = fullName;
+    }
+
+    public String getFullName() {
+        return this.fullName;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
+    }
+
+    public String getEmail() {
+        return this.email;
+    }
+
+    public void setPhone1(String phone1) {
+        this.phone1 = phone1;
+    }
+
+    public String getPhone1() {
+        return this.phone1;
+    }
+
+    public void setPhone2(String phone2) {
+        this.phone2 = phone2;
+    }
+
+    public String getPhone2() {
+        return this.phone2;
+    }
+
+    public void setPasswordHash(String passwordHash) {
+        this.passwordHash = passwordHash;
+    }
+
+    public String getPasswordHash() {
+        return this.passwordHash;
+    }
+
+    public void setRole(Role role) {
+        this.role = role;
+    }
+
+    public Role getRole() {
+        return this.role;
+    }
+
+    public void setStatus(Status status) {
+        this.status = status;
+    }
+
+    public Status getStatus() {
+        return this.status;
+    }
+
+    public void setCreatedAt(Timestamp createdAt) {
+        this.createdAt = createdAt;
+    }
+
+    public Timestamp getCreatedAt() {
+        return this.createdAt;
+    }
+
+    public void setUpdatedAt(Timestamp updatedAt) {
+        this.updatedAt = updatedAt;
+    }
+
+    public Timestamp getUpdatedAt() {
+        return this.updatedAt;
+    }
+    
+    public static boolean isAdmin(String role) {
+        return Role.ADMIN.name().toLowerCase().equals(role);
+    }
+
+    public static class FksUserPK {
+
+        private Integer userId;
+
+        public FksUserPK() {}
+
+        public FksUserPK(Integer userId) {
+            this.userId = userId;
+        }
+
+        public void setUserId(Integer userId) {
+            this.userId = userId;
+        }
+
+        public Integer getUserId() {
+            return this.userId;
+        }
+
+        @Override
+        public int hashCode() {
+            int hash = 7;
+            hash = 71 * hash + Objects.hashCode(this.userId);
+            return hash;
+        }
+
+        @Override
+        public boolean equals(Object obj) {
+            if (this == obj) {
+                return true;
+            }
+            if (obj == null) {
+                return false;
+            }
+            if (getClass() != obj.getClass()) {
+                return false;
+            }
+            final FksUserPK other = (FksUserPK)obj;
+            if (! Objects.equals(this.userId, other.userId)) {
+                return false;
+            }
+            return true;
+        }
+
+    }
+}

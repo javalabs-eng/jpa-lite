@@ -1,8 +1,10 @@
 package org.javalabs.jpa.query;
 
+import java.lang.reflect.Field;
 import org.javalabs.jpa.descriptor.ClassDescriptor;
 import org.javalabs.jpa.descriptor.PersistenceHandler;
 import org.javalabs.jpa.descriptor.RelAttribute;
+import org.javalabs.jpa.descriptor.RuntimeRelAttributeImpl;
 import org.javalabs.jpa.util.QueryHints;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -10,6 +12,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
+import org.javalabs.jpa.descriptor.RelAttribute.RelType;
 
 /**
  * Abstract class to define the column value retrieval strategy.
@@ -98,6 +101,13 @@ public abstract class RetrievalStrategy {
         else if (obj instanceof List) {
             fetchDefs = (List<String>)obj;
         }
+        // Special check.
+        // If there is no relationship specified in the respective entities, but you still want your
+        // returned object to ave the relationshipt hierarcy, use this attribute.
+        Object fetchFields = hints.get(QueryHints.FETCH_FIELD);
+        if (fetchFields != null) {
+            return runtimeRelation(desc, fetchDefs, fetchFields);
+        }
         
         List<RelAttribute> oneToOnes = null;
         List<RelAttribute> oneToManies = null;
@@ -169,5 +179,46 @@ public abstract class RetrievalStrategy {
             }
         }
         return binders;
+    }
+    
+    protected List<RelAttribute> runtimeRelation(ClassDescriptor desc, List<String> fetchDefs, Object fetchFields) {
+        List<String> fields = null;
+        
+        if (fetchFields instanceof String) {
+            fields = Arrays.asList((String)fetchFields);
+        }
+        else if (fetchFields instanceof List) {
+            fields = (List<String>)fetchFields;
+        }
+        else {
+            throw new IllegalArgumentException("Invalid value for " + QueryHints.FETCH_FIELD
+                    + ". Must be a string field or list of string field names");
+        }
+        
+        try {
+            List<RelAttribute> rels = new ArrayList<>(fetchDefs.size());
+            
+            for (int i = 0; i < fetchDefs.size(); i ++) {
+                String fetchDef = fetchDefs.get(i);
+                String fieldName = fields.get(i);
+                
+                Field field = desc.entityClass().getDeclaredField(fieldName);
+                
+                if (fetchDef.equals("OneToOne")) {
+                    rels.add(new RuntimeRelAttributeImpl(field, Enum.valueOf(RelType.class, fetchDef)));
+                }
+                else if (fetchDef.equals("OneToMany")) {
+                    rels.add(new RuntimeRelAttributeImpl(field, Enum.valueOf(RelType.class, fetchDef)));
+                }
+                else {
+                    throw new IllegalArgumentException(
+                        "Invalid fetch definition. Supported ones: OneToOne and OneToMany");
+                }
+            }
+            return rels;
+        }
+        catch (ReflectiveOperationException e) {
+            throw new IllegalArgumentException("No such field is found in entity " + desc.entityClass().getName());
+        }
     }
 }

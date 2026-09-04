@@ -22,8 +22,8 @@ import java.util.List;
  */
 public class RelAttributeImpl extends EntityAttributeImpl implements RelAttribute {
     
-    private Relation relation;
-    private List<Join> joins = new ArrayList<>();
+    private final Relation relation;
+    private final List<Join> joins = new ArrayList<>();
     
     private final JoinType joinType;
     
