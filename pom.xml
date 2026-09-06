@@ -77,12 +77,6 @@
             <version>2.2.224</version>
             <scope>test</scope>
         </dependency>
-        <dependency>
-            <groupId>org.postgresql</groupId>
-            <artifactId>postgresql</artifactId>
-            <version>42.7.13</version>
-            <scope>runtime</scope>
-        </dependency>
     </dependencies>
     <build>
         <plugins>

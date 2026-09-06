@@ -4,11 +4,11 @@
 
 export BASE_DIR=$HOME/Projects/jpa-lite
 
-export CLASSPATH=$BASE_DIR/target/jpa-lite-1.0.5.jar
+export CLASSPATH=$BASE_DIR/target/jpa-lite-1.0.7.jar
 export CLASSPATH=$CLASSPATH:$BASE_DIR/lib/jakarta.persistence-api-4.0.0-M1.jar
 export CLASSPATH=$CLASSPATH:$BASE_DIR/lib/slf4j-api-2.1.0-alpha1.jar
 export CLASSPATH=$CLASSPATH:$BASE_DIR/lib/slf4j-simple-2.1.0-alpha1.jar
-export CLASSPATH=$CLASSPATH:$BASE_DIR/lib/postgresql-42.7.5.jar
+export CLASSPATH=$CLASSPATH:$BASE_DIR/lib/postgresql-42.7.13.jar
 export CLASSPATH=$CLASSPATH:$HOME/.m2/repository/jakarta/xml/bind/jakarta.xml.bind-api/4.0.2/jakarta.xml.bind-api-4.0.2.jar
 export CLASSPATH=$CLASSPATH:$HOME/.m2/repository/org/glassfish/jaxb/jaxb-runtime/4.0.5/jaxb-runtime-4.0.5.jar
 export CLASSPATH=$CLASSPATH:$HOME/.m2/repository/org/glassfish/jaxb/jaxb-core/4.0.5/jaxb-core-4.0.5.jar
