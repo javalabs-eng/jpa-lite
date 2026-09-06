@@ -1155,6 +1155,73 @@ USING BTREE (department);
 ./schema-gen --help
 `
 
+## Entity Class Generation
+
+You can generate the jpa entities for the set of tables by connecting to a remote db.
+
+`model-gen` utility is part of the `jpa-lite` project only. You can find the details by issuing the command `sh model-gen --help`
+
+```
+(base) jpa-lite % sh model-gen --help
+
+Description: JPA-LiTE supports generating jpa entities from the database tables
+Usage     : model-gen [OPTIONS] ...
+Example   : model-gen -d postgres -p <test-pu> -r <project.root.dir>
+
+The options are:
+
+-d [--dialect] <name>                    Database dialect [postgres, sybase, oracle, h2, db2, mysql, derby]
+-j [--project-dir] <project.root.dir>    Root directory of the projects where generated jpa entities will be placed
+-k [--package] <package>                 Package name of the generated jpa entities
+-h [--db-host] <host_name>               Host name of the database server
+-p [--db-port] <port>                    Port of the remote database server
+-n [--db-name] <db_name>                 Remote database name
+-s [--db-schema] <schema_name>           Schema name of the database to be queried for table metadata
+-u [--db-user] <db_user>                 Name of the database user
+-w [--db-password] <db_password>         Password of the database user
+-t [--table-name] <sample_table>         Pass the sample table name for testing purpose
+-x [--exclude-prefix] <ex_prefix>        Table name prefix that will be excluded while forming the final entity name.
+                                         [E.g., for prefix 'mnc_professionals', mnc_ will be mapped to Professional class. In normal scenario, it would be MncProfessional]
+-v [--verbose]                           Verbose Output
+
+```
+
+### How to Execute
+
+The below command will generate the jpa entities from all the tables.
+
+```
+sh model-gen \
+    -j /path/to/your/java/project \
+    -k {package.name} \
+    -d postgres \
+    -h localhost \
+    -p 5432 \
+    -n {db.name} \
+    -s public \
+    -u {db.user} \
+    -w {db.password} \
+    -x {ex_prefix}
+
+```
+
+The below command will generate the jpa entity from the table as specified in the `-t` option.
+
+```
+sh model-gen \
+    -j /path/to/your/java/project \
+    -k {package.name} \
+    -d postgres \
+    -h localhost \
+    -p 5432 \
+    -n {db.name} \
+    -s public \
+    -u {db.user} \
+    -w {db.password} \
+    -x mnc_ \
+    -t mnc_professionals
+```
+
 ## Appendix - SQL Dialect
 
 Following table explains the dialect name.

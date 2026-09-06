@@ -252,8 +252,8 @@ public class EntityGenerator {
     private static String help() {
         StringBuilder buff = new StringBuilder(256);
         buff.append("\n").append(String.format("%-10s: %s", "Description", "JPA-LiTE supports generating jpa entities from the database tables"));
-        buff.append("\n").append(String.format("%-10s: %s", "Usage", "entity-gen [OPTIONS] ..."));
-        buff.append("\n").append(String.format("%-10s: %s", "Example", "entity-gen -d postgres -p <test-pu> -r <project.root.dir>"));
+        buff.append("\n").append(String.format("%-10s: %s", "Usage", "model-gen [OPTIONS] ..."));
+        buff.append("\n").append(String.format("%-10s: %s", "Example", "model-gen -d postgres -p <test-pu> -r <project.root.dir>"));
         buff.append("\n\n").append("The options are:");
         buff.append("\n\n");
         buff.append(String.format("%-40s %s\n", "-d [--dialect] <name>", "Database dialect [postgres, sybase, oracle, h2, db2, mysql, derby]"));
@@ -267,7 +267,7 @@ public class EntityGenerator {
         buff.append(String.format("%-40s %s\n", "-w [--db-password] <db_password>", "Password of the database user"));
         buff.append(String.format("%-40s %s\n", "-t [--table-name] <sample_table>", "Pass the sample table name for testing purpose"));
         buff.append(String.format("%-40s %s\n", "-x [--exclude-prefix] <ex_prefix>", "Table name prefix that will be excluded while forming the final entity name."));
-        buff.append(String.format("%-40s %s\n", "", "[E.g., for prefix 'folks_professionals', folks_ will be mapped to Professional class. In normal scenario, it would be EcmJob]"));
+        buff.append(String.format("%-40s %s\n", "", "[E.g., for prefix 'mnc_professionals', mnc_ will be mapped to Professional class. In normal scenario, it would be MncProfessional]"));
         buff.append(String.format("%-40s %s\n", "-v [--verbose]", "Verbose Output"));
         
         return buff.toString();
