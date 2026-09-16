@@ -69,7 +69,9 @@ public abstract class DatabaseQuery implements Query {
     
     protected DatabaseQuery(LiteEntityManager em) {
         this.em = em;
-        verbose = LOGGER.isTraceEnabled();
+        this.verbose = System.getProperties().containsKey("show.sql")
+                || "true".equalsIgnoreCase(System.getProperty("show.sql"))
+                || LOGGER.isTraceEnabled();
     }
     
     /**

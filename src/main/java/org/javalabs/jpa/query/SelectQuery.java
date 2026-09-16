@@ -199,7 +199,15 @@ public class SelectQuery extends DatabaseQuery {
             .append("\n  Bind => ")
             .append(params);
 
-        LOGGER.trace(buffer.toString());
+        if (LOGGER.isTraceEnabled()) {
+            LOGGER.trace(buffer.toString());
+        }
+        else if (LOGGER.isDebugEnabled()) {
+            LOGGER.debug(buffer.toString());
+        }
+        else {
+            LOGGER.info(buffer.toString());
+        }
         buffer.delete(0, buffer.length());
     }
 
