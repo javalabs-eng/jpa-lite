@@ -41,10 +41,16 @@ public class IndexRetrievalStrategy extends RetrievalStrategy {
         
         List<RelAttribute> rels = null;
         Boolean nativeQuery = false;
+        Boolean populateResultCol = false;
         List<Binder> binders = null;
         
         ClassDescriptor desc = handler.getDescriptor(clazz);
-        Object val = hints.get(QueryHints.ALLOW_NATIVE_QUERY);
+        Object val = hints.get(QueryHints.POPULATE_RESULT_COLUMN);
+        if (val != null) {
+            populateResultCol = (Boolean)val;
+        }
+        
+        val = hints.get(QueryHints.ALLOW_NATIVE_QUERY);
         if (val != null) {
             nativeQuery = Boolean.parseBoolean(val.toString());
         }
@@ -80,6 +86,9 @@ public class IndexRetrievalStrategy extends RetrievalStrategy {
                     tmp.add(childElement);
                 }
             }
+            if (populateResultCol) {
+                populateResultColumn(desc, element, resultSet, childIndex);
+            }
             if (limit != -1 && ++ count == limit) {
                 return list;
             }
@@ -109,13 +118,30 @@ public class IndexRetrievalStrategy extends RetrievalStrategy {
         , ResultSet resultSet
         , int index) throws SQLException {
         
+        return introspect(element, resultSet, Boolean.FALSE, index, desc.attributes());
+    }
+
+    private int populateResultColumn(ClassDescriptor desc
+            , Object element
+            , ResultSet resultSet
+            , int index) throws SQLException {
+        
+        return introspect(element, resultSet, Boolean.TRUE, index, desc.resultColumns());
+    }
+    
+    private int introspect(Object element
+            , ResultSet resultSet
+            , Boolean ignoreTransient
+            , int index
+            , Iterator<EntityAttribute> attributeIterator) throws SQLException {
+        
         EntityAttribute attribute = null;
         
         try {
-            for (Iterator<EntityAttribute> itr = desc.attributes(); itr.hasNext(); ) {
+            for (Iterator<EntityAttribute> itr = attributeIterator; itr.hasNext(); ) {
                 attribute = itr.next();
                 Class<?> type = attribute.datatype();
-                if (attribute.isTransient()) {
+                if (! ignoreTransient && attribute.isTransient()) {
                     continue;
                 }
                 if (type == String.class) {

@@ -22,6 +22,7 @@ import java.util.Iterator;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
+import org.javalabs.jpa.annotation.ResultColumn;
 
 /**
  * Concrete class to represent a managed class/jpa entity.
@@ -53,6 +54,9 @@ public class EntityClassImpl implements ClassDescriptor {
     
     // Map to hold the column name to field.
     private final LinkedHashMap<String, EntityAttribute> attributes = new LinkedHashMap<>();
+    
+    // Map to hold the result column name to field.
+    private final LinkedHashMap<String, EntityAttribute> resultCols = new LinkedHashMap<>();
 
     // Map to hold the column name vs getter method name
     private final Map<String, Method> getters = new HashMap<>();
@@ -161,15 +165,19 @@ public class EntityClassImpl implements ClassDescriptor {
                 rels.add(rel);
             }
             else {
-                // If the attribute is of type collection
+                // Check if it is a result column type
                 EntityAttribute attribute = new EntityAttributeImpl(field);
                 if (attribute.isId()) {
                     ids.add(attribute);
                 }
-
-                // Generate column mappping
-                attributes.put(attribute.column(), attribute);
-
+                
+                if (field.isAnnotationPresent(ResultColumn.class)) {
+                    resultCols.put(attribute.column(), attribute);
+                }
+                else {
+                    // Generate column mappping
+                    attributes.put(attribute.column(), attribute);
+                }
                 processAttribute(clazz, field, attribute);
             }
         }
@@ -355,5 +363,10 @@ public class EntityClassImpl implements ClassDescriptor {
     @Override
     public Index[] indexes() {
         return indexes;
+    }
+
+    @Override
+    public Iterator<EntityAttribute> resultColumns() {
+        return resultCols.values().iterator();
     }
 }

@@ -40,14 +40,21 @@ public class NativeQueryTest {
         
         try {
             Map<String, Object> dbConfig = new HashMap<>();
+            dbConfig.put("javax.persistence.jdbc.url", "jdbc:postgresql://localhost:5432/folksdb");
+            dbConfig.put("javax.persistence.jdbc.user", "folks");
+            dbConfig.put("javax.persistence.jdbc.password", "p@$$word");
+            dbConfig.put("javax.persistence.jdbc.host", "localhost");
+            dbConfig.put("javax.persistence.jdbc.port", "5432");
+            
             emf = Persistence.createEntityManagerFactory("jpa-pu", dbConfig);
             em = emf.createEntityManager();
             
             // binders.add(new OneToOneBinder(RelAttribute.RelType.OneToOne));
             
             List<FksProfessional> list = em.createNamedQuery("Professional.selectByExtId", FksProfessional.class)
-                    .setParameter(1, "dfa9b88-ccf0-1086-ca4f-faed29bdded8")
+                    .setParameter(1, "fafa9b88-ccf0-1086-ca4f-faed29bdded8")
                     .setHint(QueryHints.ALLOW_NATIVE_QUERY, Boolean.TRUE)
+                    .setHint(QueryHints.RETRIEVAL_STRATEGY, QueryHints.RetrievalStrategy.INDEX)
                     .setHint(QueryHints.QUERY_TYPE, QueryCache.QueryType.SELECT_REL)
                     .setHint(QueryHints.FETCH_DEF, "OneToOne")
                     .setHint(QueryHints.FETCH_FIELD, "user")

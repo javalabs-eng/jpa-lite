@@ -35,5 +35,5 @@ public final class QueryHints {
     public static final String FETCH_FIELD = "fetch.field";
     public static final String QUERY_TYPE = "query.type";
     public static final String ENABLE_BATCH = "enable.batch";
-    
+    public static final String POPULATE_RESULT_COLUMN = "populate.result.column";
 }

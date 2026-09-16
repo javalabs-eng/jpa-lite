@@ -155,4 +155,10 @@ public interface ClassDescriptor {
      * @return Index
      */
     Index[] indexes();
+    
+    /**
+     * Return an iterator over the set of result columns that this entity has.
+     * @return Iterator
+     */
+    Iterator<EntityAttribute> resultColumns();
 }

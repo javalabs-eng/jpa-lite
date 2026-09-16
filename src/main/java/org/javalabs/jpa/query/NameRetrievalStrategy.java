@@ -4,7 +4,6 @@ import org.javalabs.jpa.descriptor.ClassDescriptor;
 import org.javalabs.jpa.descriptor.EntityAttribute;
 import org.javalabs.jpa.descriptor.RelAttribute;
 import org.javalabs.jpa.util.ObjectCreationUtil;
-import org.javalabs.jpa.util.QueryHints;
 import jakarta.persistence.EnumType;
 import java.math.BigDecimal;
 import java.math.BigInteger;
@@ -18,6 +17,7 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
+import org.javalabs.jpa.util.QueryHints;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -41,10 +41,17 @@ public class NameRetrievalStrategy extends RetrievalStrategy {
         
         List<RelAttribute> rels = null;
         Boolean nativeQuery = false;
+        Boolean populateResultCol = false;
         List<Binder> binders = null;
         
         ClassDescriptor desc = handler.getDescriptor(clazz);
-        Object val = hints.get(QueryHints.ALLOW_NATIVE_QUERY);
+        
+        Object val = hints.get(QueryHints.POPULATE_RESULT_COLUMN);
+        if (val != null) {
+            populateResultCol = (Boolean)val;
+        }
+        
+        val = hints.get(QueryHints.ALLOW_NATIVE_QUERY);
         if (val != null) {
             nativeQuery = Boolean.parseBoolean(val.toString());
         }
@@ -80,6 +87,10 @@ public class NameRetrievalStrategy extends RetrievalStrategy {
                     tmp.add(childElement);
                 }
             }
+            if (populateResultCol) {
+                populateResultColumn(desc, element, resultSet);
+            }
+            
             if (limit != -1 && ++ count == limit) {
                 return list;
             }
@@ -105,16 +116,31 @@ public class NameRetrievalStrategy extends RetrievalStrategy {
     }
     
     private void fetchInternal(ClassDescriptor desc
-        , Object element
-        , ResultSet resultSet) throws SQLException {
+            , Object element
+            , ResultSet resultSet) throws SQLException {
+        
+        introspect(element, resultSet, Boolean.FALSE, desc.attributes());
+    }
+
+    private <T> void populateResultColumn(ClassDescriptor desc
+            , Object element
+            , ResultSet resultSet) throws SQLException {
+        
+        introspect(element, resultSet, Boolean.TRUE, desc.resultColumns());
+    }
+    
+    private void introspect(Object element
+            , ResultSet resultSet
+            , Boolean ignoreTransient
+            , Iterator<EntityAttribute> attributeIterator) throws SQLException {
         
         EntityAttribute attribute = null;
         
         try {
-            for (Iterator<EntityAttribute> itr = desc.attributes(); itr.hasNext(); ) {
+            for (Iterator<EntityAttribute> itr = attributeIterator; itr.hasNext(); ) {
                 attribute = itr.next();
                 Class<?> type = attribute.datatype();
-                if (attribute.isTransient()) {
+                if (! ignoreTransient && attribute.isTransient()) {
                     continue;
                 }
                 if (type == String.class) {

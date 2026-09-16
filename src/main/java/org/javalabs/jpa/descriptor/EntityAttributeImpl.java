@@ -13,6 +13,7 @@ import java.lang.reflect.Field;
 import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.WildcardType;
 import java.util.Collection;
+import org.javalabs.jpa.annotation.ResultColumn;
 
 /**
  * Platform provided implementation of {@link EntityAttribute} class.
@@ -107,6 +108,12 @@ public class EntityAttributeImpl implements EntityAttribute {
         if (generated && ! Number.class.isAssignableFrom(datatype)) {
             throw new IllegalArgumentException("Attribute " + field.getName() + " is a Generated column."
                     + " The datatype must be a Number");
+        }
+        ResultColumn rsColAnnotation = field.getAnnotation(ResultColumn.class);
+        if (rsColAnnotation != null) {
+            column = rsColAnnotation.name().toLowerCase();
+            updatable = false;
+            nullable = true;
         }
     }
 
