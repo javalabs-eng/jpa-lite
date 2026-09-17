@@ -10,6 +10,7 @@ import java.math.BigDecimal;
 import java.math.BigInteger;
 import java.sql.Date;
 import java.sql.ResultSet;
+import java.sql.ResultSetMetaData;
 import java.sql.SQLException;
 import java.sql.Time;
 import java.sql.Timestamp;
@@ -126,7 +127,19 @@ public class IndexRetrievalStrategy extends RetrievalStrategy {
             , ResultSet resultSet
             , int index) throws SQLException {
         
-        return introspect(element, resultSet, Boolean.TRUE, index, desc.resultColumns());
+        ResultSetMetaData metaData = resultSet.getMetaData();
+        List<EntityAttribute> attrs = new ArrayList<>();
+        EntityAttribute attr = null;
+        
+        for (int i = 1; i <= metaData.getColumnCount(); i ++) {
+            for (Iterator<EntityAttribute> itr = desc.resultColumns(); itr.hasNext(); ) {
+                attr = itr.next();
+                if (attr.column().equals(metaData.getColumnLabel(i))) {
+                    attrs.add(attr);
+                }
+            }
+        }
+        return introspect(element, resultSet, Boolean.TRUE, index, attrs.iterator());
     }
     
     private int introspect(Object element
